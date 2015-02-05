@@ -1,0 +1,25 @@
+{
+  "name": "chai-style",
+  "version": "0.0.1",
+  "description": "A webdriver-driven style and layout assertion library for Chai",
+  "main": "main.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "keywords": [
+    "style",
+    "css",
+    "layout",
+    "assertions",
+    "chai",
+    "assert",
+    "grid"
+  ],
+  "author": "Tim Perry",
+  "license": "MIT",
+  "dependencies": {
+    "chai": "^1.10.0",
+    "chai-webdriver": "^1.0.0",
+    "selenium-webdriver": "^2.44.0"
+  }
+}
