@@ -19,8 +19,14 @@ chai.use(function (chai, utils) {
       throw new Error('Can only test alignment of dom elements');
     }
     return $.all(this._obj).then(function(els) {
-      self.assert(false, 'Should be left aligned');
-      return typeof done === "function" ? done() : void 0;
+      sw.promise.map(els, function(e) {
+        return e.getLocation();
+      }).then(function(locations) {
+        self.assert(locations.every(function(location) {
+          return location.x === locations[0].x;
+        }, "Not all left positions were equal"));
+        return typeof done === "function" ? done() : void 0;
+      });
     });      
   });
   chai.Assertion.addMethod('equalWidth', function(done) {
@@ -29,8 +35,30 @@ chai.use(function (chai, utils) {
       throw new Error('Can only test size of dom elements');
     }
     return $.all(this._obj).then(function(els) {
-      self.assert(false, 'Should have equal width');
-      return typeof done === "function" ? done() : void 0;
+      sw.promise.map(els, function(e) {
+        return e.getSize();
+      }).then(function(sizes) {
+        self.assert(sizes.every(function(size) {
+          return size.width === sizes[0].width;
+        }, "Not all sizes were equal"));
+        return typeof done === "function" ? done() : void 0;
+      });
+    });      
+  });
+  chai.Assertion.addMethod('equalHeight', function(done) {
+    var self = this;
+    if (!utils.flag(this, 'dom')) {
+      throw new Error('Can only test size of dom elements');
+    }
+    return $.all(this._obj).then(function(els) {
+      sw.promise.map(els, function(e) {
+        return e.getSize();
+      }).then(function(sizes) {
+        self.assert(sizes.every(function(size) {
+          return size.height === sizes[0].height;
+        }, "Not all sizes were equal"));
+        return typeof done === "function" ? done() : void 0;
+      });
     });      
   });
 });
@@ -38,7 +66,7 @@ chai.use(function (chai, utils) {
 // And you're good to go! 
 driver.get('http://github.com');
 
-loginElements = 'input[name="user[email]"], input[name="user[name]"], input[name="user[password]"], button.primary'
+loginElements = 'input[name="user[email]"], input[name="user[login]"], input[name="user[password]"], button.primary'
 
 chai.expect(loginElements).dom.to.be.leftAligned()
 chai.expect(loginElements).dom.to.have.equalWidth()
